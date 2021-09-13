@@ -5,36 +5,54 @@ const loadProducts = () => {
 
 
 
-// show all product in UI 
+//----------- show all product in UI --------------
 const showProducts = (products) => {
   const allProducts = products.map((pd) => pd);
   for (const product of allProducts) {
-    // product image
+    //------------ product image------------
     const image = product.image;
-    // product rating
-    const {rate,count}= product.rating
+    //------------ product rating----------------
+    const { rate, count } = product.rating
     const div = document.createElement("div");
-  
+
     div.classList.add("product");
+    // -----------Set innerHTML--------------
     div.innerHTML = `
     <div class="single-product">
     
       <img class="w-100 h-50 mx-auto product-image" src=${image}></img>
 
-          <div >
-          <h4 >${product.title.slice(0, 25)}</h4>
-          <p >Category: ${product.category}</p>
-          <h4 >Price: $ ${product.price}</h4>
-          <h6 >Total-Rating : ${count}</h6>
-          <h6 >Average-rating: ${rate}</h6>
-          <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
-          <button id="details-btn" class="btn btn-danger">Details</button>
+          <div>
+              <h4>${product.title.slice(0, 25)}</h4>
+              <p>Category: ${product.category}</p>
+              <h4>Price: $ ${product.price}</h4>
+              <h6>Total-Rating : ${count}</h6>
+              <h6>Average-rating: ${rate}</h6>
+              
+              <button onclick="addToCart(${product.id},${product.price})" id="addToCart-btn" class="buy-now btn btn-success">add to cart</button>
+              
+              <button onclick="productDetails(${product.price},${rate})" id="details-btn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Details</button>
+          
           </div>
-    </div>
+  </div>
       `;
     document.getElementById("all-products").appendChild(div);
   }
 };
+
+//---------Product Details Function ---------
+const productDetails = (price, rating) => {
+  document.getElementById("modal-details").innerHTML =
+    `
+    <div>
+    <h2>Price: $ ${price}</h2>
+    <h2>Rating: ${rating}</h2>
+    </div>
+  `;
+
+}
+
+//------------------ Add to cart -------------------------
 let count = 0;
 const addToCart = (id, price) => {
   count = count + 1;
@@ -42,7 +60,7 @@ const addToCart = (id, price) => {
 
   updateTaxAndCharge();
   document.getElementById("total-Products").innerText = count;
-// ..........
+  // ..........
   updateTotal();
 };
 
@@ -52,7 +70,7 @@ const getInputValue = (id) => {
   return converted;
 };
 
-// main price update function
+// ------------main price update function---------------
 const updatePrice = (id, value) => {
   const convertedOldPrice = getInputValue(id);
   const convertPrice = parseFloat(value);
@@ -60,12 +78,12 @@ const updatePrice = (id, value) => {
   document.getElementById(id).innerText = total.toFixed(2);
 };
 
-// set innerText function
+// ------------set innerText function-----------------
 const setInnerText = (id, value) => {
   document.getElementById(id).innerText = Math.round(value);
 };
 
-// update delivery charge and total Tax
+//---------- update delivery charge and total Tax--------------
 const updateTaxAndCharge = () => {
   const priceConverted = getInputValue("price");
   if (priceConverted > 200) {
@@ -82,11 +100,12 @@ const updateTaxAndCharge = () => {
   }
 };
 
-//grandTotal update function
+//--------------grandTotal update function--------------
 const updateTotal = () => {
   const grandTotal =
     getInputValue("price") + getInputValue("delivery-charge") +
     getInputValue("total-tax");
   document.getElementById("total").innerText = grandTotal.toFixed(2);
 };
+
 loadProducts();

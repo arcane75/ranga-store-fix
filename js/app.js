@@ -18,7 +18,8 @@ const showProducts = (products) => {
     div.classList.add("product");
     div.innerHTML = `
     <div class="single-product">
-      <img class="w-75 h-50 mx-auto product-image" src=${image}></img>
+    
+      <img class="w-100 h-50 mx-auto product-image" src=${image}></img>
 
           <div >
           <h4 >${product.title.slice(0, 25)}</h4>
